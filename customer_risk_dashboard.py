@@ -136,17 +136,12 @@ with graph_col2:
 st.header("Customers predicted to churn by State")
 
 # Read in data of states and their capitol's longitude and latitude
-with open('states_processed.csv', mode='r') as myfile:
-    reader = csv.reader(myfile)
-    
-    latdict = {rows[2]:rows[0] for rows in reader}
-    
-    adjusted_df['latitude']=adjusted_df['State'].map(latdict)
+with open('state_capitol_coordinates.csv', mode='r') as myfile:
+    reader = [rows for rows in csv.reader(myfile)]
 
-with open('states_processed.csv', mode='r') as myfile:
-    reader = csv.reader(myfile)
-    longdict = {rows[2]:rows[1] for rows in reader}
-    adjusted_df['longitude']=adjusted_df['State'].map(longdict)
+    latitude = {rows[2]:rows[0] for rows in reader}  
+    longitude = {rows[2]:rows[1] for rows in reader}
+    adjusted_df['latitude']=adjusted_df['State'].map(latitude).astype("int")
+    adjusted_df['longitude']=adjusted_df['State'].map(longitude).astype("int")
 
-adjusted_df = adjusted_df.astype({"latitude":"int","longitude":"int"})
 st.map(adjusted_df, 2)
